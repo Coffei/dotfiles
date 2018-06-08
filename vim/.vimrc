@@ -8,12 +8,25 @@ set shiftwidth=4
 set clipboard=unnamedplus
 filetype plugin indent on
 set omnifunc=syntaxcomplete#Complete
-colorscheme deus
+colorscheme gruvbox
 set background=dark
 set relativenumber
+set ignorecase
+set smartcase
 
 set splitright
 set laststatus=2
+
+" lightline
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
 
 " Set syntax folding as it's working for Elixir and open 20 levels by default
 set foldmethod=syntax
@@ -22,6 +35,11 @@ set foldlevelstart=20
 "Move swap files
 set directory=~/.vim/swapfiles//
 
+"Enable deoplete
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
 "Enabling syntastic for Elixir by compiling the files
 let g:syntastic_elixir_checkers = ['elixir']
 let g:syntastic_enable_elixir_checker = 1
@@ -29,6 +47,9 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+"Enable credo via neomake
+let g:neomake_elixir_enabled_makers = ['credo']
 
 "xoxo Wojtek Mach
 "Fixes test execution in umbrella apps

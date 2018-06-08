@@ -3,7 +3,9 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'itchyny/lightline.vim'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'roxma/nvim-yarp'
+Plugin 'roxma/vim-hug-neovim-rpc'
 Plugin 'scrooloose/nerdtree'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
@@ -20,7 +22,10 @@ Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'easymotion/vim-easymotion'
-
+Plugin 'morhetz/gruvbox'
+Plugin 'itchyny/lightline.vim'
+Plugin 'neomake/neomake'
+Plugin 'Raimondi/delimitMate'
 call vundle#end()
 
 filetype plugin indent on
