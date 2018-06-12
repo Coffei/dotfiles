@@ -185,12 +185,12 @@ exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff 
 exec compton -b
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Natural Scrolling Enabled" 1
-exec --no-startup-id feh --bg-scale /usr/share/backgrounds/gnome/Signpost_of_the_Shadows.jpg
+exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f28/default/standard/f28.png
 exec --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
 
-bindsym XF86MonBrightnessUp exec light -A 5 # Increase Brightness
-bindsym XF86MonBrightnessDown exec light -U 5 # Decrease Brightness
+bindsym XF86MonBrightnessUp exec brightnessctl set 5%+ # Increase Brightness
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- # Decrease Brightness
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+ && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga && pkill -RTMIN+10 i3blocks
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%- && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga && pkill -RTMIN+10 i3blocks
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle-mute && pkill -RTMIN+10 i3blocks # Toggle muting

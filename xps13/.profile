@@ -5,7 +5,7 @@ then
   sed -i '/Xft.dpi/c\Xft.dpi: 96' $HOME/.Xresources
   sed -i '/dpi = /c\dpi = 96' $HOME/.config/polybar/config
   sed -i '/height = /c\height = 27' $HOME/.config/polybar/config
-  xrandr --output eDP-1 --mode 1920x1080_60.00 --primary
+  xrandr --output eDP-1 --mode 1920x1080 --primary
   xrandr --output DP-1 --pos 1920x0
 else
   sed -i '/Xft.dpi/c\Xft.dpi: 196' $HOME/.Xresources
