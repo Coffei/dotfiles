@@ -189,8 +189,8 @@ exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f28/default/standard/
 exec --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
 
-bindsym XF86MonBrightnessUp exec brightnessctl set 5%+ # Increase Brightness
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%- # Decrease Brightness
+bindsym XF86MonBrightnessUp exec brightnessctl set 10%+ # Increase Brightness
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%- # Decrease Brightness
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+ && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga && pkill -RTMIN+10 i3blocks
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%- && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga && pkill -RTMIN+10 i3blocks
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle-mute && pkill -RTMIN+10 i3blocks # Toggle muting
