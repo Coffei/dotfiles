@@ -21,16 +21,31 @@ set laststatus=2
 let g:lightline = {
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ]
+      \            ]
       \ },
       \ 'component_function': {
       \   'gitbranch': 'fugitive#head'
       \ },
       \ }
 
+"let g:lightline.component_expand = {
+"      \  'linter_checking': 'lightline#ale#checking',
+"      \  'linter_warnings': 'lightline#ale#warnings',
+"      \  'linter_errors': 'lightline#ale#errors',
+"      \  'linter_ok': 'lightline#ale#ok',
+"      \ }
+
+"let g:lightline.component_type = {
+"      \     'linter_checking': 'left',
+"      \     'linter_warnings': 'warning',
+"      \     'linter_errors': 'error',
+"      \     'linter_ok': 'left',
+"      \ }
+
 " Set syntax folding as it's working for Elixir and open 20 levels by default
-set foldmethod=syntax
-set foldlevelstart=20
+"set foldmethod=syntax
+"set foldlevelstart=20
 
 "Move swap files
 set directory=~/.vim/swapfiles//
@@ -48,6 +63,9 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+" Ale
+" let g:ale_linters = {'elixir': ['credo', 'mix']}
+
 "Enable credo via neomake
 let g:neomake_elixir_enabled_makers = ['credo']
 
@@ -60,12 +78,33 @@ function! ElixirUmbrellaTransform(cmd) abort
     return a:cmd
   end
 endfunction
+"let test#filename_modifier = ":p"
 
 let g:test#custom_transformations = {'elixir_umbrella': function('ElixirUmbrellaTransform')}
 let g:test#transformation = 'elixir_umbrella'
 
 " Fix for Glog to open in quickfix
 autocmd QuickFixCmdPost *grep* cwindow
+
+"Elixir LS
+"LanguageClient-neovim
+let g:LanguageClient_serverCommands = {
+    \ 'elixir': ['elixir-ls'],
+    \ }
+
+" vim-lsp
+" if executable('elixir-ls')
+"     au User lsp_setup call lsp#register_server({
+"         \ 'name': 'elixir-ls',
+"         \ 'cmd': {server_info->['elixir-ls']},
+"         \ 'whitelist': ['elixir'],
+"         \ })
+" endif
+" let g:lsp_signs_enabled = 1         " enable signs
+" let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+" let g:lsp_signs_error = {'text': '✗'}
+" let g:lsp_signs_warning = {'text': '‼',}
+" let g:lsp_signs_hint = {'text': '→'}
 
 " Custom shortcuts
 let mapleader=" "
@@ -79,6 +118,8 @@ nmap <leader>k <C-W>k
 nmap <leader>gp <Plug>GitGutterPreviewHunk
 nmap <leader>gu <Plug>GitGutterUndoHunk
 nmap <leader>gs <Plug>GitGutterStageHunk
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>:normal! m'<CR>
+nmap <leader>t :call LanguageClient_textDocument_documentSymbol()<CR>
+nmap <leader>o :call LanguageClient_contextMenu()<CR>
 imap fd <Esc>
-"let test#filename_modifier = ":p"
-
