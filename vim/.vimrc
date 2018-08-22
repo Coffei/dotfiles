@@ -10,12 +10,32 @@ filetype plugin indent on
 set omnifunc=syntaxcomplete#Complete
 colorscheme gruvbox
 set background=dark
-set relativenumber
+set number relativenumber
 set ignorecase
 set smartcase
 
 set splitright
 set laststatus=2
+set wildmode=longest,list,full
+set wildmenu
+
+" caret in gnome-terminal
+let &t_SI = "\<Esc>[6 q"
+let &t_SR = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[2 q"
+" if has("autocmd")
+"   au VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw!
+"   au InsertEnter,InsertChange *
+" \ if v:insertmode == 'i' | 
+" \   silent execute '!echo -ne "\e[6 q"' | redraw! |
+" \ elseif v:insertmode == 'r' |
+" \   silent execute '!echo -ne "\e[4 q"' | redraw! |
+" \ endif
+" au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
+" endif
+
+" disable elixir in vim-polyglot
+let g:polyglot_disabled = ['elixir']
 
 " lightline
 let g:lightline = {
@@ -67,16 +87,17 @@ let g:syntastic_check_on_wq = 0
 " let g:ale_linters = {'elixir': ['credo', 'mix']}
 
 "Enable credo via neomake
+call neomake#configure#automake('w')
 let g:neomake_elixir_enabled_makers = ['credo']
 
 "xoxo Wojtek Mach
 "Fixes test execution in umbrella apps
 function! ElixirUmbrellaTransform(cmd) abort
-  if match(a:cmd, 'apps/') != -1
-    return '(' . substitute(a:cmd, 'mix test apps/\([^/]*/\)', '\cd apps/\1 \&\& mix test \2', '') . ')'
-  else
-    return a:cmd
-  end
+    if match(a:cmd, 'apps/') != -1
+        return '(' . substitute(a:cmd, 'mix test\(\s*--no-color\)* apps/\([^/]*/\)', '\cd apps/\2 \&\& mix test\1 \3', '') . ')'
+    else
+        return a:cmd
+    end
 endfunction
 "let test#filename_modifier = ":p"
 
@@ -122,4 +143,7 @@ nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
 nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>:normal! m'<CR>
 nmap <leader>t :call LanguageClient_textDocument_documentSymbol()<CR>
 nmap <leader>o :call LanguageClient_contextMenu()<CR>
+nmap <Leader>fs <Plug>(easymotion-overwin-f)
+nmap <Leader>ff <Plug>(easymotion-sn)
 imap fd <Esc>
+vmap fd <Esc>

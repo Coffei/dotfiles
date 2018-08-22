@@ -25,10 +25,13 @@ Plugin 'easymotion/vim-easymotion'
 Plugin 'morhetz/gruvbox'
 Plugin 'itchyny/lightline.vim'
 Plugin 'neomake/neomake'
-Plugin 'Raimondi/delimitMate'
+Plugin 'jiangmiao/auto-pairs'
+"Plugin 'Townk/vim-autoclose'
 "Plugin 'w0rp/ale'
 Plugin 'maximbaz/lightline-ale'
 Plugin 'autozimu/LanguageClient-neovim' " might need special post-install procedures, check readme
+Plugin 'sheerun/vim-polyglot'
+Plugin 'python-mode/python-mode'
 call vundle#end()
 
 filetype plugin indent on
