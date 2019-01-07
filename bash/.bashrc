@@ -8,6 +8,12 @@ fi
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
+#Java 11 default
+export JAVA_HOME=/usr/lib/jvm/java-11
+
+# Rustup
+source $HOME/.cargo/env
+
 # User specific aliases and functions
 # Prompt
 prompt_command () {

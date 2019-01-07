@@ -44,10 +44,10 @@ bindsym $mod+d exec "rofi -dpi $(cat $HOME/.Xresources | awk '{print $2}') -show
 bindsym $mod+t exec "rofi -dpi $(cat $HOME/.Xresources | awk '{print $2}') -show window -modi window,run,drun"
 
 # change focus
-# bindsym $mod+j focus left
+bindsym $mod+j focus left
 # bindsym $mod+k focus down
 # bindsym $mod+l focus up
-# bindsym $mod+uring focus right
+bindsym $mod+k focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -185,9 +185,10 @@ exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff 
 exec compton -b
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Natural Scrolling Enabled" 1
-exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f28/default/standard/f28.png
+exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f28/extras/a-special-silent-sunset.jpg
 exec --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
+exec --no-startup-id ibus-daemon
 
 bindsym XF86MonBrightnessUp exec brightnessctl set 10%+ # Increase Brightness
 bindsym XF86MonBrightnessDown exec brightnessctl set 10%- # Decrease Brightness

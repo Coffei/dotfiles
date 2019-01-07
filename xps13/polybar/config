@@ -51,7 +51,7 @@ font-2 = FontAwesome:pixelsize=10;0
 
 modules-left = i3
 modules-center = 
-modules-right = backlight-acpi playerctl volume xkeyboard memory cpu wlan battery date powermenu
+modules-right = backlight-acpi playerctl volume todotxt xkeyboard memory cpu wlan battery date powermenu
 
 tray-position = right
 tray-padding = 2
@@ -375,6 +375,12 @@ click-right = playerctl next
 
 format-underline = #EEFF33
 interval = 2
+
+[module/todotxt]
+type = custom/script
+format = " <label>"
+exec = ~/.config/polybar/tasks.sh
+interval = 60
 
 [settings]
 screenchange-reload = true

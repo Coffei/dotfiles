@@ -18,6 +18,7 @@ set splitright
 set laststatus=2
 set wildmode=longest,list,full
 set wildmenu
+set textwidth=100
 
 " caret in gnome-terminal
 let &t_SI = "\<Esc>[6 q"
@@ -48,20 +49,27 @@ let g:lightline = {
       \   'gitbranch': 'fugitive#head'
       \ },
       \ }
+"      \  'right': [ [ 'lineinfo' ],
+"      \             [ 'percent' ],
+"      \             [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+"      \             [ 'filetype', 'fileencoding' ] ]
 
-"let g:lightline.component_expand = {
-"      \  'linter_checking': 'lightline#ale#checking',
-"      \  'linter_warnings': 'lightline#ale#warnings',
-"      \  'linter_errors': 'lightline#ale#errors',
-"      \  'linter_ok': 'lightline#ale#ok',
-"      \ }
+let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
 
-"let g:lightline.component_type = {
-"      \     'linter_checking': 'left',
-"      \     'linter_warnings': 'warning',
-"      \     'linter_errors': 'error',
-"      \     'linter_ok': 'left',
-"      \ }
+let g:lightline.component_type = {
+      \     'linter_checking': 'left',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
+      \ }
+
+" Project root for vinegar
+autocmd FileType netrw nnoremap <buffer> gr :edit ./<CR>
 
 " Set syntax folding as it's working for Elixir and open 20 levels by default
 "set foldmethod=syntax
@@ -76,15 +84,16 @@ let g:deoplete#enable_smart_case = 1
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 "Enabling syntastic for Elixir by compiling the files
-let g:syntastic_elixir_checkers = ['elixir']
-let g:syntastic_enable_elixir_checker = 1
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" let g:syntastic_elixir_checkers = ['elixir']
+" let g:syntastic_enable_elixir_checker = 1
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 
 " Ale
-" let g:ale_linters = {'elixir': ['credo', 'mix']}
+" let g:ale_elixir_elixir_ls_release = '/home/jtrantin/Apps/elixir-ls/bin/'
+" let g:ale_linters = {'elixir': ['elixir-ls', 'credo']}
 
 "Enable credo via neomake
 call neomake#configure#automake('w')
@@ -127,8 +136,12 @@ let g:LanguageClient_serverCommands = {
 " let g:lsp_signs_warning = {'text': '‼',}
 " let g:lsp_signs_hint = {'text': '→'}
 
+" vim-orgmode config
+let g:org_todo_keywords=['TODO(t)', 'IN-PROGRESS(i)', 'REVIEW(r)', 'DONE(d)']
+
 " Custom shortcuts
 let mapleader=" "
+let maplocalleader="\\"
 nmap <leader>p :Files<CR>
 nmap <leader>q :q<CR>
 nmap <leader>w :w<CR>
