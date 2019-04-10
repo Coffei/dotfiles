@@ -19,6 +19,7 @@ set laststatus=2
 set wildmode=longest,list,full
 set wildmenu
 set textwidth=100
+set formatoptions-=t
 
 " caret in gnome-terminal
 let &t_SI = "\<Esc>[6 q"
@@ -35,8 +36,12 @@ let &t_EI = "\<Esc>[2 q"
 " au VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
 " endif
 
+
+" FZF settings
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+
 " disable elixir in vim-polyglot
-let g:polyglot_disabled = ['elixir']
+let g:polyglot_disabled = ['elixir', 'org']
 
 " lightline
 let g:lightline = {
