@@ -189,6 +189,7 @@ exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f28/extras/a-special-
 exec --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
 exec --no-startup-id ibus-daemon
+exec --no-startup-id dropbox start
 
 bindsym XF86MonBrightnessUp exec brightnessctl set 10%+ # Increase Brightness
 bindsym XF86MonBrightnessDown exec brightnessctl set 10%- # Decrease Brightness
