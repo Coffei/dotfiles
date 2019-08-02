@@ -35,7 +35,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layers
    '(vimscript
      javascript
-     dash
+     react
      python
      sql
      csv
@@ -43,10 +43,10 @@ This function should only modify configuration layer settings."
      yaml
      lsp
      (java :variables java-backend 'lsp)
-     (rust :variables rust-backend 'lsp)
      erlang
      elixir
-     c-c++
+     emacs-lisp
+     markdown
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -55,17 +55,16 @@ This function should only modify configuration layer settings."
      helm
      auto-completion
      better-defaults
-     emacs-lisp
      git
-     markdown
-     ;; neotree
+     neotree
      org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
      ;; spell-checking
      syntax-checking
      version-control
+     ;; (shell :variables
+     ;;        shell-default-height 30
+     ;;        shell-default-position 'bottom)
+     ;; treemacs
      )
 
    ;; List of additional packages that will be installed without being
@@ -225,7 +224,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
+                               :size 10.5 ;; 15 for lodpi, 30 for hidpi
                                :weight normal
                                :width normal)
 
@@ -347,7 +346,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil unicode symbols are displayed in the mode line.
    ;; If you use Emacs as a daemon and wants unicode characters only in GUI set
    ;; the value to quoted `display-graphic-p'. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
 
    ;; If non-nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
@@ -479,6 +478,8 @@ before packages are loaded."
   ;; LSP mode definition for Elixir
   (require 'lsp)
   (require 'company-lsp)
+  (require 'flycheck)
+
   (defcustom elixir-ls-executable "/home/jtrantin/Apps/elixir-ls/bin/language_server.sh"
     "The elixir-language-server executable to use.
 Leave as just the executable name to use the default behavior of
@@ -492,13 +493,36 @@ finding the executable with `exec-path'."
                     :priority -1
                     :server-id 'elixir-ls
                     :initialized-fn (lambda (workspace)
+                                      ;; override save => true if server doesn't advertise it
+                                      ;; (puthash
+                                      ;;  "textDocumentSync"
+                                      ;;  (ht ("save" t)
+                                      ;;      ("change" 2))
+                                      ;;  (lsp--workspace-server-capabilities workspace))
                                       (with-lsp-workspace workspace
                                         (let ((config `(:elixirLS (:mixEnv "dev" :dialyzerEnabled :json-false))))
                                           (lsp--set-configuration config))
-                                        ))))
+                                        )
+                                      )
+                    ))
   (add-hook 'elixir-mode-hook 'lsp)
+  (add-hook 'lsp-ui-mode-hook (lambda ()
+                                (if
+                                    (not (member 'elixir-credo (flycheck-all-next-checkers 'lsp-ui)))
+                                    (flycheck-add-next-checker 'lsp-ui 'elixir-credo))
+                                ))
   (push 'company-lsp company-backends)
 
+  ;; Using correct formatter.exs for Elixir Formatter
+  (add-hook 'elixir-format-hook (lambda ()
+                                  (if (projectile-project-p)
+                                      (let ((formatter-file (concat (locate-dominating-file buffer-file-name ".formatter.exs") ".formatter.exs")))
+                                        (if (file-exists-p formatter-file)
+                                            (setq elixir-format-arguments
+                                                  (list "--dot-formatter" formatter-file))
+                                          (setq elixir-format-arguments nil)
+                                          ))
+                                    (setq elixir-format-arguments nil))))
   ;; ExUnit tester config
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
@@ -522,6 +546,9 @@ finding the executable with `exec-path'."
    '(org-agenda-files (quote ("~/Documents/notes/todo.org")))
    '(org-default-notes-file "~/Documents/notes/todo.org")
    '(org-agenda-done))
+
+  ;; JS settings
+  (setq js2-strict-missing-semi-warning nil)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
