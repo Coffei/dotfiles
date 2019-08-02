@@ -30,7 +30,7 @@ prompt_command () {
     if git rev-parse --git-dir > /dev/null 2>&1; then
         BRANCH=$(git branch 2>/dev/null | grep '^*' | colrm 1 2 | tr -d "\n")
         STAGED=$(git status -s 2> /dev/null | grep "^[MA]" | wc -l)
-        NOT_STAGED=$(git status -s 2> /dev/null | grep "^ M" | wc -l)
+        NOT_STAGED=$(git status -s 2> /dev/null | grep "^ [MD]" | wc -l)
 
         if [ "$STAGED" -gt 0 ]; then
             STAGED_STATUS=" ${LGREEN}${STAGED}"$'\u2691'
@@ -64,7 +64,7 @@ prompt_command () {
 
     export PS1="${GREEN}\w${GIT}${STATUS_COLOR} >> ${COLOR_RESET}"
 }
-PROMPT_COMMAND=prompt_command
+export PROMPT_COMMAND=prompt_command
 
 stty -ixon
 unset command_not_found_handle
