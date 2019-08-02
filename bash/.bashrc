@@ -18,6 +18,8 @@ source $HOME/.cargo/env
 # Prompt
 prompt_command () {
     LAST_EXIT="$?"
+    # Adds last command to history immediatelly
+    history -a; history -c; history -r;
     # Colors
     YELLOW="\[\033[93m\]"
     LGREEN="\[\033[92m\]"
