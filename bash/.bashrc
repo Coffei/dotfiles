@@ -7,6 +7,11 @@ fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
+alias tv='LC_TIME=en_US.UTF-8 vimx ~/Documents/notes/todo.org'
+
+# Increase history file size
+HISTSIZE=5000
+HISTFILESIZE=10000
 
 #Java 11 default
 export JAVA_HOME=/usr/lib/jvm/java-11
