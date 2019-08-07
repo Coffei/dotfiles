@@ -1,0 +1,13 @@
+#!/bin/bash
+# Formats XML document with xmllint. The original document is kept and is added `.old` extension.
+
+if [ "$#" -eq 0 ] || [ "$#" -gt 1 ] ; then
+    echo 'You have to include exactly 1 argument - the file you want to format.'
+    echo ' Example: xml-format file.xml'
+    exit 0
+fi
+
+FILE=$1
+OLD=${FILE}.old
+mv $FILE $OLD
+xmllint --format $OLD > $FILE

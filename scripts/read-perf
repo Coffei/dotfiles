@@ -1,0 +1,5 @@
+#!/bin/bash
+# Read performance level of the CPU, should be 0 for max performance. Checks the 0x19a MSR (model
+# specific register).
+
+sudo rdmsr --all 0x19a

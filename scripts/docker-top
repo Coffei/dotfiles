@@ -1,0 +1,11 @@
+#!/bin/bash
+# Top of docker container's processes.
+
+if [ "$#" -eq 0 ] || [ "$#" -gt 1 ] ; then
+    echo 'You have to include exactly 1 argument - the docker cotainer you want to top.'
+    echo ' Example: docker-top my-container-id'
+    exit 0
+fi
+
+PIDS=$(docker top "$1" | awk '{if (NR!=1) print $2}' | paste -sd "," -) 
+top -p $PIDS

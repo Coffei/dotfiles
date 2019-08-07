@@ -1,0 +1,6 @@
+#!/bin/bash
+# Sets max performance level of all CPUs in the system. Sets the 0x19a MSR (model specific register)
+# of the CPU to 0 (corresponds to max performance).
+
+sudo wrmsr --all 0x19a 0
+
