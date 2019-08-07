@@ -1,6 +1,6 @@
 #!/bin/bash
 if playerctl status &> /dev/null; then
-  status=`playerctl status`
+  status=`playerctl -i chrome status`
   case $status in
     Paused) 
       status_symbol=
@@ -9,8 +9,8 @@ if playerctl status &> /dev/null; then
       status_symbol=
       ;;
   esac
-  title=`exec playerctl metadata xesam:title`
-  artist=`exec playerctl metadata xesam:artist`
+  title=`exec playerctl -i chrome metadata xesam:title`
+  artist=`exec playerctl -i chrome metadata xesam:artist`
   echo "$status_symbol $title - $artist"
 else
   echo ""

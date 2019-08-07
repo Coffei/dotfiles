@@ -180,8 +180,7 @@ workspace_layout tabbed
 exec setxkbmap -layout us,cz -option grp:alt_shift_toggle
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1 &
 exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e'
-# exec xrandr --output eDP-1 --mode 1920x1080_60.00
-# exec xrandr --output DP-1 --pos 1920x0 --primary
+exec --no-startup-id dunst
 exec compton -b
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Natural Scrolling Enabled" 1
@@ -196,13 +195,10 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 10%- # Decrease Brightness
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+ && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga && pkill -RTMIN+10 i3blocks
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%- && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga && pkill -RTMIN+10 i3blocks
 bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle-mute && pkill -RTMIN+10 i3blocks # Toggle muting
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+l exec i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
-bindsym $mod+F11 exec playerctl play-pause
-bindsym $mod+F5 exec playerctl play-pause
-bindsym $mod+F12 exec playerctl next
-bindsym $mod+F6 exec playerctl next
-bindsym $mod+F10 exec playerctl previous
-bindsym $mod+F4 exec playerctl previous
 bindsym Mod1+Tab workspace back_and_forth

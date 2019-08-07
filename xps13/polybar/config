@@ -45,13 +45,13 @@ padding-right = 3
 module-margin-left = 1
 module-margin-right = 2
 
-font-0 = fixed:pixelsize=10;0
+font-0 = DejaVuSans:pixelsize=10;0
 font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = FontAwesome:pixelsize=10;0
 
 modules-left = i3
 modules-center = 
-modules-right = backlight-acpi playerctl volume todotxt xkeyboard memory cpu wlan battery date powermenu
+modules-right = backlight-acpi playerctl volume xkeyboard memory cpu wlan battery date powermenu
 
 tray-position = right
 tray-padding = 2
