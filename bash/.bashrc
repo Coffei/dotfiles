@@ -13,6 +13,9 @@ alias tv='LC_TIME=en_US.UTF-8 vimx ~/Documents/notes/todo.org'
 HISTSIZE=5000
 HISTFILESIZE=10000
 
+# Auto unlock ssh key
+cat ~/.ssh/id_rsa | SSH_ASKPASS="$HOME/.sshpass" ssh-add - &>/dev/null
+
 #Java 11 default
 export JAVA_HOME=/usr/lib/jvm/java-11
 
