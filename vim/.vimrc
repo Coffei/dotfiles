@@ -8,8 +8,9 @@ set shiftwidth=4
 set clipboard=unnamedplus
 filetype plugin indent on
 set omnifunc=syntaxcomplete#Complete
-colorscheme gruvbox
+" Theming
 set background=dark
+colorscheme solarized8_high
 set number relativenumber
 set ignorecase
 set smartcase
@@ -36,6 +37,7 @@ let g:polyglot_disabled = ['elixir', 'org']
 
 " lightline
 let g:lightline = {
+            \ 'colorscheme': 'solarized',
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
             \             [ 'gitbranch',  'cocstatus', 'readonly', 'filename', 'modified' ]
