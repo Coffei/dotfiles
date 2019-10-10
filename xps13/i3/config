@@ -181,15 +181,15 @@ bindsym $mod+r mode "resize"
 
 # Custom commands
 workspace_layout tabbed
-exec setxkbmap -layout us,cz -option grp:alt_shift_toggle
 exec --no-startup-id /usr/libexec/polkit-gnome-authentication-agent-1 &
 exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e'
+exec_always setxkbmap -layout us,cz -option grp:alt_shift_toggle
 exec --no-startup-id dunst
 exec compton -b
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Natural Scrolling Enabled" 1
 exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f28/extras/a-special-silent-sunset.jpg
-exec --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
+exec_always --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
 exec --no-startup-id ibus-daemon
 exec --no-startup-id dropbox start
