@@ -17,23 +17,27 @@ set smartcase
 set updatetime=500
 
 set splitright
+set splitbelow
 set laststatus=2
 set wildmode=longest,list,full
 set wildmenu
 set textwidth=100
 set formatoptions-=t
+set colorcolumn=100
+set spell
 
 " caret in gnome-terminal
 let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[2 q"
-
+" alias `vterm` to `vertical terminal`
+cnoreabbrev <expr> vterm ((getcmdtype() is# ':' && getcmdline() is# 'vterm')?('vertical terminal'):('vterm'))
 
 " FZF settings
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 
 " disable elixir in vim-polyglot
-let g:polyglot_disabled = ['elixir', 'org']
+let g:polyglot_disabled = ['elixir']
 
 " lightline
 let g:lightline = {
@@ -137,6 +141,11 @@ nmap <leader>l <C-W>l
 nmap <leader>h <C-W>h
 nmap <leader>j <C-W>j
 nmap <leader>k <C-W>k
+nmap <leader>s <C-W>s
+nmap <leader>v <C-W>v
+nmap <leader>o <C-W>o
+nmap <leader>Q :tabclose<CR>
+nmap <leader>N :tabnew<CR>
 nmap <leader>gp <Plug>GitGutterPreviewHunk
 nmap <leader>gu <Plug>GitGutterUndoHunk
 nmap <leader>gs <Plug>GitGutterStageHunk
@@ -154,10 +163,11 @@ inoremap <silent><expr> <TAB>
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 
-autocmd FileType elixir nmap gd <Plug>(coc-definition)
-autocmd FileType elixir nmap gD :vs<CR><Plug>(coc-definition)
-autocmd FileType elixir nmap K :call CocActionAsync('doHover')<CR>
-autocmd FileType elixir nmap <leader>t :CocList outline<CR>
+autocmd FileType elixir,java,rust nmap gd <Plug>(coc-definition)
+autocmd FileType elixir,java,rust nmap gD :vs<CR><Plug>(coc-definition)
+autocmd FileType elixir,java,rust nmap K :call CocActionAsync('doHover')<CR>
+autocmd FileType elixir,java,rust nmap <leader>t :CocList outline<CR>
+autocmd FileType elixir,java,rust nmap <leader>r <Plug>(coc-references)
 nmap <Leader>fs <Plug>(easymotion-overwin-f)
 nmap <Leader>ff <Plug>(easymotion-sn)
 autocmd FileType elixir nmap <localleader>f :MixFormat<CR>

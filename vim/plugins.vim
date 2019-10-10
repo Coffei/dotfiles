@@ -18,6 +18,7 @@ Plugin 'janko-m/vim-test'
 Plugin 'mhinz/vim-mix-format'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tommcdo/vim-fubitive'
 Plugin 'tpope/vim-commentary'
 Plugin 'easymotion/vim-easymotion'
 " Themes
