@@ -4,7 +4,9 @@
 
 xrandr --output DP1 --off --output DP2 --off
 xrandr --output eDP1 --mode 3200x1800
+sleep 1
 hidpi
 i3-msg restart
 sleep 1
 ~/.config/polybar/launch-all.sh
+pkill dunst && dunst &
