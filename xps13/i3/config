@@ -183,7 +183,7 @@ bindsym $mod+r mode "resize"
 workspace_layout tabbed
 exec_always setxkbmap -layout us,cz -option grp:alt_shift_toggle
 exec xset s 300 5
-exec xss-lock -n /usr/lib/xsecurelock/dimmer -l -- i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e
+exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e'
 exec --no-startup-id dunst
 exec compton -b
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
@@ -202,7 +202,7 @@ bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle-mu
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-bindsym $mod+l exec xset s activate & sleep 5 && xset dpms force off
+bindsym $mod+l exec i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e & sleep 2 && xset dpms force off
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 bindsym Mod1+Tab workspace back_and_forth
