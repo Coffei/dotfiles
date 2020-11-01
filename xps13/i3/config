@@ -206,3 +206,5 @@ bindsym $mod+l exec i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e & sleep 2 
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 bindsym Mod1+Tab workspace back_and_forth
+bindsym Print exec maim ~/Pictures/$(date +%Y-%m-%d-%H:%M:%S).png
+bindsym shift+Print exec maim -s ~/Pictures/$(date +%Y-%m-%d-%H:%M:%S).png
