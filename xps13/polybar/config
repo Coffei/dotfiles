@@ -51,7 +51,7 @@ font-2 = FontAwesome:pixelsize=10;0
 
 modules-left = i3
 modules-center = 
-modules-right = backlight-acpi playerctl volume xkeyboard memory cpu wlan battery date powermenu
+modules-right = kdeconnect backlight-acpi playerctl volume xkeyboard memory cpu wlan bluetooth battery date powermenu
 
 tray-position = right
 tray-padding = 2
@@ -258,7 +258,7 @@ format-underline = #0a6cf5
 label = %date% %time%
 
 [module/volume]
-type = internal/volume
+type = internal/pulseaudio
 
 format-volume = <label-volume> <bar-volume>
 label-volume = 
@@ -290,13 +290,15 @@ type = internal/battery
 battery = BAT0
 adapter = ADP1
 full-at = 98
+time-format = %H:%M
 
 format-charging = <animation-charging> <label-charging>
 format-charging-underline = #ffb52a
+label-charging = "%percentage%%"
 
 format-discharging = <ramp-capacity> <label-discharging>
 format-discharging-underline = ${self.format-charging-underline}
-label-discharging = "%percentage%%"
+label-discharging = "%percentage%% (%time%)"
 
 format-full-prefix = " "
 format-full-prefix-foreground = ${colors.foreground-alt}
@@ -382,6 +384,18 @@ format = " <label>"
 exec = ~/.config/polybar/tasks.sh
 interval = 60
 
+[module/kdeconnect]
+type = custom/script  
+exec = "~/Apps/polybar-kdeconnect/polybar-kdeconnect.sh -d"  
+click-right = exec kdeconnect-settings
+tail = true
+
+[module/bluetooth]
+type = custom/script
+exec = ~/Apps/polybar-bluetooth/bluetooth.sh
+interval = 2
+click-left = exec blueman-manager
+click-right = exec ~/Apps/polybar-bluetooth/toggle_bluetooth.sh
 [settings]
 screenchange-reload = true
 ;compositing-background = xor
