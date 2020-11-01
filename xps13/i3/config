@@ -188,7 +188,7 @@ exec --no-startup-id dunst
 exec compton -b
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Natural Scrolling Enabled" 1
-exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f28/extras/a-special-silent-sunset.jpg
+exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f32/default/f32.png
 exec_always --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
 exec --no-startup-id ibus-daemon
