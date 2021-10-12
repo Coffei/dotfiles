@@ -1,6 +1,6 @@
 #!/bin/bash
-if playerctl status &> /dev/null; then
-  status=`playerctl -i chrome status`
+if playerctl -i chrome,chromium,firefox status &> /dev/null; then
+  status=`playerctl -i chrome,chromium,firefox status`
   case $status in
     Paused) 
       status_symbol=
@@ -9,9 +9,13 @@ if playerctl status &> /dev/null; then
       status_symbol=
       ;;
   esac
-  title=`exec playerctl -i chrome metadata xesam:title`
-  artist=`exec playerctl -i chrome metadata xesam:artist`
-  echo "$status_symbol $title - $artist"
+  if playerctl -i chrome,chromium,firefox metadata xesam:title &> /dev/null && playerctl -i chrome,chromium,firefox metadata xesam:artist &> /dev/null; then
+    title=`exec playerctl -i chrome,chromium,firefox metadata xesam:title`
+    artist=`exec playerctl -i chrome,chromium,firefox metadata xesam:artist`
+    echo "$status_symbol $title - $artist"
+  else
+    echo "$status_symbol"
+  fi
 else
   echo ""
 fi

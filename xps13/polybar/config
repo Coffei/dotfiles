@@ -51,7 +51,7 @@ font-2 = FontAwesome:pixelsize=10;0
 
 modules-left = i3
 modules-center = 
-modules-right = kdeconnect backlight-acpi playerctl volume xkeyboard memory cpu wlan bluetooth battery date powermenu
+modules-right = stopwatch stopwatch-update kdeconnect backlight-acpi playerctl volume micstatus xkeyboard memory cpu wlan battery date config-link powermenu
 
 tray-position = right
 tray-padding = 2
@@ -78,8 +78,9 @@ type = internal/xwindow
 label = %title:0:30:...%
 
 [module/xkeyboard]
-type = internal/xkeyboard
-blacklist-0 = num lock
+type = custom/script
+exec = ~/.config/polybar/kblayout.sh
+interval=2
 
 format-prefix = "  "
 format-prefix-foreground = ${colors.foreground-alt}
@@ -266,7 +267,7 @@ label-volume-foreground = ${root.foreground}
 
 format-muted-prefix = " "
 format-muted-foreground = ${colors.foreground-alt}
-label-muted = sound muted
+label-muted = muted
 
 bar-volume-width = 10
 bar-volume-foreground-0 = #55aa55
@@ -396,6 +397,31 @@ exec = ~/Apps/polybar-bluetooth/bluetooth.sh
 interval = 2
 click-left = exec blueman-manager
 click-right = exec ~/Apps/polybar-bluetooth/toggle_bluetooth.sh
+
+[module/stopwatch]
+type = custom/ipc
+hook-0 = stopwatch status --time-format '{H:02}:{M:02}' --stopped-prefix='' --running-prefix='' --paused-prefix=''
+initial = 1
+click-left = stopwatch toggle && polybar-msg hook stopwatch 1
+click-right = stopwatch reset && polybar-msg hook stopwatch 1
+click-middle = exec gnome-terminal --hide-menubar -- vimx ~/.stopwatch
+
+[module/stopwatch-update]
+type = custom/script
+exec = polybar-msg hook stopwatch 1 &>/dev/null
+interval = 30
+
+[module/config-link]
+type = custom/text
+content = 
+click-left = gnome-control-center
+
+[module/micstatus]
+type = custom/script
+interval = 1
+exec = bash ~/.config/polybar/micstatus.sh
+click-left = xdotool key ctrl+F7
+
 [settings]
 screenchange-reload = true
 ;compositing-background = xor
