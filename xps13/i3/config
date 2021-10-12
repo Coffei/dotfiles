@@ -70,6 +70,8 @@ bindsym $mod+Shift+Right move right
 # move workspaces between outputs
 bindsym $mod+Ctrl+Left move workspace to output left
 bindsym $mod+Ctrl+Right move workspace to output right
+bindsym $mod+Ctrl+Up move workspace to output up
+bindsym $mod+Ctrl+Down move workspace to output down
 
 # split in horizontal orientation
 bindsym $mod+h split h
@@ -181,28 +183,43 @@ bindsym $mod+r mode "resize"
 
 # Custom commands
 workspace_layout tabbed
-exec_always setxkbmap -layout us,cz -option grp:alt_shift_toggle
+# i3 lock
+# exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e'
 exec xset s 300 5
-exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e'
-exec --no-startup-id dunst
+exec xautolock -time 10 -locker 'dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock'
+# superseeded by the Gnome notification daemon
+# exec --no-startup-id dunst
 exec compton -b
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Natural Scrolling Enabled" 1
 exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f32/default/f32.png
 exec_always --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
 exec --no-startup-id ibus-daemon
-exec --no-startup-id dropbox start
 
-bindsym XF86MonBrightnessUp exec brightnessctl set 10%+ # Increase Brightness
-bindsym XF86MonBrightnessDown exec brightnessctl set 10%- # Decrease Brightness
-bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+ && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga
-bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%- && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga
-bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle-mute # Toggle muting
-bindsym XF86AudioPlay exec playerctl play-pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
-bindsym $mod+l exec i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e & sleep 2 && xset dpms force off
+# Gnome integration
+exec --no-startup-id gnome-flashback
+# exec --no-startup-id /usr/libexec/gsd-keyboard
+exec --no-startup-id /usr/libexec/gsd-media-keys
+exec --no-startup-id /usr/libexec/gsd-sound
+exec --no-startup-id /usr/libexec/gsd-screensaver-proxy
+exec --no-startup-id /usr/libexec/gsd-rfkill
+exec --no-startup-id /usr/libexec/gsd-xsettings
+exec --no-startup-id /usr/libexec/gsd-power
+exec --no-startup-id /usr/libexec/gsd-wwan
+
+exec_always setxkbmap -layout us,cz -option grp:alt_shift_toggle
+
+# bindsym XF86MonBrightnessUp exec brightnessctl set 10%+ # Increase Brightness
+# bindsym XF86MonBrightnessDown exec brightnessctl set 10%- # Decrease Brightness
+# bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -D pulse sset Master 5%+ && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga
+# bindsym XF86AudioLowerVolume exec --no-startup-id amixer -D pulse sset Master 5%- && paplay /usr/share/sounds/freedesktop/stereo/audio-volume-change.oga
+# bindsym XF86AudioMute exec --no-startup-id amixer -D pulse sset Master toggle-mute # Toggle muting
+# bindsym XF86AudioPlay exec playerctl play-pause
+# bindsym XF86AudioNext exec playerctl next
+# bindsym XF86AudioPrev exec playerctl previous
+bindsym $mod+l exec dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 bindsym Mod1+Tab workspace back_and_forth
