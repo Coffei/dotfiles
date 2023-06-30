@@ -80,6 +80,10 @@ command! LazyGit :call LazyGit()
 command! DiffWhitespacesToggle :call DiffWhitespacesToggle()
 command! -nargs=0 Format :call CocAction('format')
 
+" Visualize trailing whitespaces
+highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
+
 " caret in gnome-terminal
 let &t_SI = "\<Esc>[6 q"
 let &t_SR = "\<Esc>[4 q"

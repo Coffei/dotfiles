@@ -36,7 +36,6 @@ Plugin 'tpope/vim-projectionist'
 Plugin 'c-brenn/fuzzy-projectionist.vim'
 Plugin 'andyl/vim-projectionist-elixir'
 Plugin 'preservim/nerdtree'
-" Plugin 'inkarkat/vim-ShowTrailingWhitespace' "kinda broken recently
 Plugin 'KabbAmine/zeavim.vim'
 if has('nvim')
     Plugin 'sindrets/diffview.nvim'
