@@ -178,9 +178,8 @@ let mapleader=" "
 let maplocalleader=","
 nmap <leader>p :Files<CR>
 nmap <leader>c :Commands<CR>
+nmap <leader>/ :Rg<CR>
 nmap <leader>q :q<CR>
-nmap <leader>d :bd<CR>
-nmap <leader>D :BufOnly<CR>
 nmap <leader>w :w<CR>
 nmap <leader>W :noa w<CR>
 nmap <leader>l <C-W>l
@@ -193,7 +192,10 @@ nmap <leader>o <C-W>o
 nmap <leader>O :tabonly<CR>
 nmap <leader>Q :tabclose<CR>
 nmap <leader>N :tabnew<CR>
-nmap <leader>b :Buffers<CR>
+nmap <leader>bb :Buffers<CR>
+nmap <leader>bl :BLines<CR>
+nmap <leader>bd :bd<CR>
+nmap <leader>bD :BufOnly<CR>
 nmap <leader>mh :vertical resize<CR>
 nmap <leader>mv :res<CR>
 nmap <leader>mm <C-W>=
@@ -219,6 +221,12 @@ nnoremap <leader>í :9wincmd w<CR>
 nmap <leader>gp <Plug>(GitGutterPreviewHunk)
 nmap <leader>gu <Plug>(GitGutterUndoHunk)
 nmap <leader>gs <Plug>(GitGutterStageHunk)
+nmap <leader>gg :G<CR>
+nmap <leader>go :Go<CR>
+nmap <leader>gn :Gn<CR>
+nmap <leader>gb :GBranches<CR>
+nmap <leader>gc :Commits<CR>
+nmap <leader>gf :Git fetch<Space>
 nmap <leader>gl :LazyGit<CR>
 " Better completion behavior for TAB and CR
 inoremap <silent><expr> <TAB>
