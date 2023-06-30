@@ -99,18 +99,53 @@ let g:fzf_checkout_git_options = '--sort=-committerdate'
 " sneak
 let g:sneak#s_next = 1
 
-" AirLine
-let g:airline_detect_spell=0
-let g:airline_theme='base16'
-let g:airline_powerline_fonts = 1
-let g:airline_skip_empty_sections = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_buffers = 0
-let g:airline#extensions#tabline#show_tabs = 1
-let airline#extensions#ale#show_line_numbers = 0
-let g:airline#extensions#coc#enabled = 1
-let g:airline#extensions#tabline#buffer_idx_mode = 1
-let g:airline#extensions#tmuxline#enabled = 1
+" Lightline
+set noshowmode
+let g:lightline = {
+  \   'component_expand' : {
+  \     'linter_checking': 'lightline#ale#checking',
+  \     'linter_infos': 'lightline#ale#infos',
+  \     'linter_warnings': 'lightline#ale#warnings',
+  \     'linter_errors': 'lightline#ale#errors',
+  \     'linter_ok': 'lightline#ale#ok',
+  \   },
+  \   'component_type' : {
+  \     'linter_checking': 'right',
+  \     'linter_infos': 'right',
+  \     'linter_warnings': 'warning',
+  \     'linter_errors': 'error',
+  \     'linter_ok': 'right',
+  \   },
+  \   'component_function': {
+  \       'gitbranch': 'FugitiveHead'
+  \     },
+  \   'active': {
+  \     'left': [
+  \                 [ 'mode', 'paste' ],
+  \                 [
+  \                     'coc_info',
+  \                     'coc_hints',
+  \                     'coc_errors',
+  \                     'coc_warnings',
+  \                     'coc_ok',
+  \                     'linter_errors',
+  \                     'linter_warnings',
+  \                     'linter_infos',
+  \                     'linter_ok'
+  \                 ],
+  \                 [ 'coc_status', 'linter_checking' ],
+  \                 [ 'readonly', 'filename', 'modified' ]
+  \             ],
+  \     'right': [ [ 'lineinfo' ],
+  \	               [ 'percent' ],
+  \                [ 'fileformat', 'fileencoding', 'filetype' ],
+  \                [ 'gitbranch' ]]
+  \   }
+  \ }
+let g:lightline#ale#indicator_ok = '✓'
+
+" register lightline components:
+call lightline#coc#register()
 
 " Set the filetype based on the file's extension, overriding any
 " 'filetype' that has already been set
