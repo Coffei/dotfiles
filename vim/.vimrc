@@ -115,9 +115,6 @@ let g:airline#extensions#tmuxline#enabled = 1
 " Defold lua scripts
 au BufRead,BufNewFile *.script set filetype=lua
 
-" Project root for vinegar
-" autocmd FileType netrw nnoremap <buffer> gr :edit ./<CR>
-
 " Set syntax fold method as default
 set foldmethod=syntax
 " Set indent folding as syntax is not working well for some langs (e.g. Elixir)
@@ -128,27 +125,6 @@ set foldlevelstart=20
 
 "Move swap files
 set directory=~/.vim/swapfiles//
-
-"Enable deoplete
-" commented for coc
-" let g:deoplete#enable_at_startup = 1
-" let g:deoplete#enable_smart_case = 1
-" inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" Neosnippets integration for deoplete
-" commented for coc 1 line
-" let g:neosnippet#enable_complete_done = 1
-" Plugin key-mappings.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-" commented for coc 3 lines
-" imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-" smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-" xmap <C-k>     <Plug>(neosnippet_expand_target)
-" For conceal markers.
-" commented for coc 3 lines
-" if has('conceal')
-"   set conceallevel=2 concealcursor=niv
-" endif
 
 " Ale
 " let g:ale_elixir_elixir_ls_release = '/home/jtrantin/Apps/elixir-ls/bin/'
@@ -181,13 +157,6 @@ let g:test#transformation = 'elixir_umbrella'
 
 " Fix for Glog to open in quickfix
 autocmd QuickFixCmdPost *grep* cwindow
-
-"Elixir LS
-"LanguageClient-neovim
-" commented for coc 3 lines
-" let g:LanguageClient_serverCommands = {
-"     \ 'elixir': ['elixir-ls'],
-"     \ }
 
 " vim-orgmode config
 let g:org_todo_keywords=['TODO(t)', 'IN-PROGRESS(i)', 'REVIEW(r)', 'DONE(d)']
@@ -250,11 +219,6 @@ nnoremap <leader>í :9wincmd w<CR>
 nmap <leader>gp <Plug>(GitGutterPreviewHunk)
 nmap <leader>gu <Plug>(GitGutterUndoHunk)
 nmap <leader>gs <Plug>(GitGutterStageHunk)
-" commented for coc 4 lines
-" nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-" nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>:normal! m'<CR>
-" nmap <leader>t :call LanguageClient_textDocument_documentSymbol()<CR>
-" nmap <leader>o :call LanguageClient_contextMenu()<CR>
 nmap <leader>gl :LazyGit<CR>
 " Better completion behavior for TAB and CR
 inoremap <silent><expr> <TAB>
