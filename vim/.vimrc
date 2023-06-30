@@ -167,10 +167,10 @@ autocmd FileType org setlocal shiftwidth=2 tabstop=2
 " COC config
 let g:coc_snippet_next = '<C-l>'
 
-" Custom functions
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
+" for coc bindings below
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Custom shortcuts
@@ -222,12 +222,11 @@ nmap <leader>gs <Plug>(GitGutterStageHunk)
 nmap <leader>gl :LazyGit<CR>
 " Better completion behavior for TAB and CR
 inoremap <silent><expr> <TAB>
-            \ pumvisible() ? coc#_select_confirm() :
-            \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-            \ <SID>check_back_space() ? "\<TAB>" :
-            \ coc#refresh()
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+      \ coc#pum#visible() ? coc#pum#confirm() :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-j>"
+inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
 
 autocmd FileType elixir,java,rust,javascript,typescript,typescript.tsx,python nmap gd <Plug>(coc-definition)
 autocmd FileType elixir,java,rust,javascript,typescript,typescript.tsx,python nmap gD :vs<CR><Plug>(coc-definition)
