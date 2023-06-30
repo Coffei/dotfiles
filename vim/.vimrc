@@ -33,6 +33,11 @@ set formatoptions-=t
 set colorcolumn=100
 set spell
 
+" fix for vim-elixir not doing ftdetect atm
+au BufRead,BufNewFile *.ex,*.exs set filetype=elixir
+au BufRead,BufNewFile *.eex,*.heex,*.leex,*.sface,*.lexs set filetype=eelixir
+au BufRead,BufNewFile mix.lock set filetype=elixir
+
 " configure fugitive-gitlab
 let g:fugitive_gitlab_domains = {'ssh://gitlab.altworx': 'https://gitlab.dev.altworx.com'}
 
