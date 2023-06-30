@@ -5,6 +5,10 @@ so ~/.vim/plugins.vim
 
 syntax on
 set mouse=a
+" set mouse even on alacritty without proper termfiles
+if $TERM == 'alacritty'
+  set ttymouse=sgr
+endif
 set expandtab
 set tabstop=4
 set shiftwidth=4
