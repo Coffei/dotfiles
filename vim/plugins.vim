@@ -15,6 +15,7 @@ Plugin 'mhinz/vim-mix-format'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tommcdo/vim-fubitive'
+Plugin 'shumphrey/fugitive-gitlab.vim'
 Plugin 'tpope/vim-commentary'
 Plugin 'easymotion/vim-easymotion'
 " Themes

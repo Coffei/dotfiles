@@ -33,6 +33,9 @@ set formatoptions-=t
 set colorcolumn=100
 set spell
 
+" configure fugitive-gitlab
+let g:fugitive_gitlab_domains = {'ssh://gitlab.altworx': 'https://gitlab.dev.altworx.com'}
+
 " Custom commands
 fun GitLL()
     let height = (&lines - 8) / 2
