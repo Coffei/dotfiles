@@ -19,11 +19,12 @@ secondary = #e60053
 alert = #bd2c40
 
 [bar/mine]
-dpi = 196
+enable-ipc = true
+dpi = 160
 wm-restack = i3
 monitor = ${env:MONITOR:eDP-1}
 width = 100%
-height = 54
+height = 36
 bottom = true
 ;offset-x = 1%
 ;offset-y = 1%
@@ -51,7 +52,7 @@ font-2 = FontAwesome:pixelsize=10;0
 
 modules-left = i3
 modules-center = 
-modules-right = stopwatch stopwatch-update kdeconnect backlight-acpi playerctl volume micstatus xkeyboard memory cpu wlan battery date config-link powermenu
+modules-right = backlight-acpi playerctl volume micstatus xkeyboard memory cpu wlan battery date config-link powermenu
 
 tray-position = right
 tray-padding = 2
