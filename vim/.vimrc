@@ -120,6 +120,8 @@ set foldmethod=syntax
 " Set indent folding as syntax is not working well for some langs (e.g. Elixir)
 " disabled since it seemed to be working just fine last time I checked
 autocmd FileType elixir setlocal foldmethod=indent
+autocmd FileType javascript setlocal foldmethod=indent
+autocmd FileType javascriptreact setlocal foldmethod=indent
 " open 20 fold levels by default
 set foldlevelstart=20
 
@@ -127,13 +129,17 @@ set foldlevelstart=20
 set directory=~/.vim/swapfiles//
 
 " Ale
-" let g:ale_elixir_elixir_ls_release = '/home/jtrantin/Apps/elixir-ls/bin/'
-" commented for coc 3 lines
-let g:ale_linters = {'elixir': ['credo']}
+let g:ale_linters = {
+ \  'elixir': ['credo'],
+ \  'javascript': ['eslint', 'fecs', 'jscs', 'jshint', 'standard', 'xo'],
+ \  'javascriptreact': ['eslint', 'fecs', 'jscs', 'jshint', 'standard', 'xo']
+ \  }
 let g:lint_delay = 0
 let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_enter = 0
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
+let g:ale_disable_lsp = 1
 
 "xoxo Wojtek Mach
 "Fixes test execution in umbrella apps
@@ -236,11 +242,16 @@ inoremap <silent><expr> <TAB>
 inoremap <expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-j>"
 inoremap <expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
 
-autocmd FileType elixir,java,rust,javascript,typescript,typescript.tsx,python nmap gd <Plug>(coc-definition)
-autocmd FileType elixir,java,rust,javascript,typescript,typescript.tsx,python nmap gD :vs<CR><Plug>(coc-definition)
-autocmd FileType elixir,java,rust,javascript,typescript,typescript.tsx,python nmap K :call CocActionAsync('doHover')<CR>
-autocmd FileType elixir,java,rust,javascript,typescript,typescript.tsx,python nmap <leader>t :CocList outline<CR>
-autocmd FileType elixir,java,rust,javascript,typescript,typescript.tsx,python nmap <leader>r <Plug>(coc-references)
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap gd <Plug>(coc-definition)
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap gD :vs<CR><Plug>(coc-definition)
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap K :call CocActionAsync('doHover')<CR>
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap <leader>t :CocFzfList outline<CR>
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap <leader>a <Plug>(coc-codeaction)
+" doesn't work atm
+" autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap <leader>a :CocFzfList actions<CR>
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap <leader>e :CocFzfList diagnostics --current-buf<CR>
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python nmap <leader>r <Plug>(coc-references)
+autocmd FileType elixir,java,rust,javascript,javascriptreact,typescript,typescriptreact,typescript.tsx,python vmap <leader>f <Plug>(coc-format-selected)
 nmap <Leader>fs <Plug>(easymotion-overwin-f)
 nmap <Leader>ff <Plug>(easymotion-sn)
 nmap <localleader>tt :TestNearest<CR>

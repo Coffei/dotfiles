@@ -31,6 +31,7 @@ Plugin 'tpope/vim-speeddating'
 Plugin 'Shougo/neosnippet.vim'
 Plugin 'Shougo/neosnippet-snippets'
 Plugin 'neoclide/coc.nvim'
+Plugin 'antoinemadec/coc-fzf'
 " Projectionist for navigating between related elixir files
 Plugin 'tpope/vim-projectionist'
 Plugin 'c-brenn/fuzzy-projectionist.vim'
