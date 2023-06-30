@@ -45,6 +45,10 @@ fun GitLL()
     call cursor(1, 1)
 endfun
 
+fun LazyGit()
+    call term_start('lazygit', #{term_finish: 'close'})
+endfun
+
 fun DiffWhitespacesToggle()
     if &diffopt =~ 'iwhiteall'
         set diffopt-=iwhiteall
@@ -64,6 +68,7 @@ else
     command! Tig silent! :call term_start('tig', {'term_finish': 'close'})
 endif
 command! GitLL :call GitLL()
+command! LazyGit :call LazyGit()
 command! DiffWhitespacesToggle :call DiffWhitespacesToggle()
 command! -nargs=0 Format :call CocAction('format')
 
@@ -78,8 +83,6 @@ cnoreabbrev <expr> vterm ((getcmdtype() is# ':' && getcmdline() is# 'vterm')?('v
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 let g:fzf_preview_window = 'right:40%' " Disable FZF preview window
 let g:fzf_commands_expect = 'alt-enter' " Directly execute commands with alt-enter
-command! -bang Commits call fzf#vim#commits({'options': '--preview-window "right:40%"'}, <bang>0)
-command! -bang BCommits call fzf#vim#buffer_commits({'options': '--preview-window "right:40%"'}, <bang>0)
 let g:fzf_checkout_git_options = '--sort=-committerdate'
 
 " AirLine
@@ -240,6 +243,7 @@ nmap <leader>gs <Plug>(GitGutterStageHunk)
 " nnoremap <silent> <C-]> :call LanguageClient_textDocument_definition()<CR>:normal! m'<CR>
 " nmap <leader>t :call LanguageClient_textDocument_documentSymbol()<CR>
 " nmap <leader>o :call LanguageClient_contextMenu()<CR>
+nmap <leader>gl :LazyGit<CR>
 " Better completion behavior for TAB and CR
 inoremap <silent><expr> <TAB>
             \ pumvisible() ? coc#_select_confirm() :
