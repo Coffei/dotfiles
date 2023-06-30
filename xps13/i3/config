@@ -30,7 +30,7 @@ font pango:monospace 9
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec gnome-terminal --hide-menubar
+bindsym $mod+Return exec terminator
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -42,6 +42,7 @@ bindsym $mod+d exec "rofi -dpi $(xrdb -query Xft.dpi | grep 'Xft.dpi' | awk '{pr
 # installed.
 bindcode 133 --release exec "rofi -dpi $(xrdb -query Xft.dpi | grep 'Xft.dpi' | awk '{print $2}') -kb-cancel Super_L -show drun -modi window,run,drun"
 bindsym $mod+t exec "rofi -dpi $(xrdb -query Xft.dpi | grep 'Xft.dpi' | awk '{print $2}') -kb-cancel Super_L -show window -modi window,run,drun"
+bindsym $mod+c exec "rofi -dpi $(xrdb -query Xft.dpi | grep 'Xft.dpi' | awk '{print $2}') -kb-cancel Super_L -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
 
 # change focus
 bindsym $mod+j focus left
@@ -122,7 +123,7 @@ bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+plus move container to workspace 1
 bindsym $mod+Shift+ecaron move container to workspace 2
 bindsym $mod+Shift+scaron move container to workspace 3
 bindsym $mod+Shift+ccaron move container to workspace 4
@@ -132,6 +133,7 @@ bindsym $mod+Shift+yacute move container to workspace 7
 bindsym $mod+Shift+aacute move container to workspace 8
 bindsym $mod+Shift+iacute move container to workspace 9
 bindsym $mod+Shift+eacute move container to workspace 10
+bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+3 move container to workspace 3
 bindsym $mod+Shift+4 move container to workspace 4
@@ -178,38 +180,40 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 # bar {
-# status_command i3blocks
+#     status_command i3blocks
 # }
 
 # Custom commands
 workspace_layout tabbed
-# i3 lock
-# exec xautolock -time 10 -locker 'i3lock -c 0b2010 -o 191d0f -w 572020 -l ffffff -e'
+# i3 lock - beware the command is copied on multiple places
+exec xautolock -time 10 -locker 'i3lock -c "#002200" -l "#ffffff" --24 -e -f'
 exec xset s 300 5
-exec xautolock -time 10 -locker 'dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock'
-# superseeded by the Gnome notification daemon
-# exec --no-startup-id dunst
-exec compton -b
+exec xss-lock --transfer-sleep-lock -- i3lock --nofork -c "#002200" -l "#ffffff" --24 -e -f
+# exec xautolock -time 10 -locker 'dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock'
+exec --no-startup-id dunst
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Tapping Enabled" 1
 exec --no-startup-id xinput set-prop "DLL075B:01 06CB:76AF Touchpad" "libinput Natural Scrolling Enabled" 1
-exec --no-startup-id feh --bg-scale /usr/share/backgrounds/f32/default/f32.png
+exec_always --no-startup-id feh --bg-scale /usr/share/backgrounds/f32/default/f32.png
 exec_always --no-startup-id sleep 1 && bash ~/.config/polybar/launch-all.sh
 exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet
 exec --no-startup-id ibus-daemon
+exec --no-startup-id greenclip daemon
+
+exec_always setxkbmap -layout cz,cz -variant coder, -option grp:alt_shift_toggle
 
 # Gnome integration
 exec --no-startup-id gnome-flashback
-# exec --no-startup-id /usr/libexec/gsd-keyboard
+exec --no-startup-id /usr/libexec/gsd-xsettings
 exec --no-startup-id /usr/libexec/gsd-media-keys
 exec --no-startup-id /usr/libexec/gsd-sound
-exec --no-startup-id /usr/libexec/gsd-screensaver-proxy
+# exec --no-startup-id /usr/libexec/gsd-screensaver-proxy
 exec --no-startup-id /usr/libexec/gsd-rfkill
-exec --no-startup-id /usr/libexec/gsd-xsettings
 exec --no-startup-id /usr/libexec/gsd-power
 exec --no-startup-id /usr/libexec/gsd-wwan
 
-exec_always setxkbmap -layout us,cz -option grp:alt_shift_toggle
+# Libinput Gestures
+exec --no-startup-id systemctl --user start libinput-gestures.service
 
 # bindsym XF86MonBrightnessUp exec brightnessctl set 10%+ # Increase Brightness
 # bindsym XF86MonBrightnessDown exec brightnessctl set 10%- # Decrease Brightness
@@ -219,9 +223,16 @@ exec_always setxkbmap -layout us,cz -option grp:alt_shift_toggle
 # bindsym XF86AudioPlay exec playerctl play-pause
 # bindsym XF86AudioNext exec playerctl next
 # bindsym XF86AudioPrev exec playerctl previous
-bindsym $mod+l exec dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock
+bindsym ctrl+F7 exec pactl set-source-mute $(pactl get-default-source) toggle
+bindsym $mod+l exec xautolock -locknow
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 bindsym Mod1+Tab workspace back_and_forth
 bindsym Print exec maim ~/Pictures/$(date +%Y-%m-%d-%H:%M:%S).png
 bindsym shift+Print exec maim -s ~/Pictures/$(date +%Y-%m-%d-%H:%M:%S).png
+
+# dunst key bindings
+bindsym ctrl+space exec dunstctl close
+bindsym ctrl+shift+space exec dunstctl close-all
+bindsym ctrl+shift+grave exec dunstctl history-pop
+bindsym ctrl+shift+period exec dunstctl action
