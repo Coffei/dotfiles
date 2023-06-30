@@ -96,6 +96,8 @@ let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
 let g:fzf_preview_window = 'right:40%' " Disable FZF preview window
 let g:fzf_commands_expect = 'alt-enter' " Directly execute commands with alt-enter
 let g:fzf_checkout_git_options = '--sort=-committerdate'
+" sneak
+let g:sneak#s_next = 1
 
 " AirLine
 let g:airline_detect_spell=0

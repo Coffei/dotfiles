@@ -38,6 +38,7 @@ Plugin 'c-brenn/fuzzy-projectionist.vim'
 Plugin 'andyl/vim-projectionist-elixir'
 Plugin 'preservim/nerdtree'
 Plugin 'KabbAmine/zeavim.vim'
+Plugin 'justinmk/vim-sneak'
 if has('nvim')
     Plugin 'sindrets/diffview.nvim'
 endif
