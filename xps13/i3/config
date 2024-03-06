@@ -30,7 +30,7 @@ font pango:monospace 9
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec terminator
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -92,7 +92,7 @@ bindsym $mod+e layout splith
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $mod+alt+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -211,6 +211,8 @@ exec --no-startup-id /usr/libexec/gsd-sound
 exec --no-startup-id /usr/libexec/gsd-rfkill
 exec --no-startup-id /usr/libexec/gsd-power
 exec --no-startup-id /usr/libexec/gsd-wwan
+
+exec --no-startup-id lxpolkit
 
 # Libinput Gestures
 exec --no-startup-id systemctl --user start libinput-gestures.service
