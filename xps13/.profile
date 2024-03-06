@@ -8,3 +8,5 @@
 # else
 #   $HOME/bin/hidpi
 # fi
+
+. $HOME/.asdf/asdf.sh
