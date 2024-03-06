@@ -34,7 +34,8 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(vimscript
-     javascript
+     (javascript :variables javascript-backend 'lsp)
+     (typescript :variables typescript-backend 'lsp)
      react
      python
      sql
@@ -58,9 +59,12 @@ This function should only modify configuration layer settings."
      git
      neotree
      org
-     ;; spell-checking
+     spell-checking
      syntax-checking
      version-control
+     emacs-lisp
+     multiple-cursors
+     themes-megapack
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -77,6 +81,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       gruvbox-theme
                                       exunit
+                                      ;; (eglot :location (recipe :fetcher github :repo "joaotavora/eglot"))
+                                      org-kanban
                                       ;; lsp-mode
                                       ;; lsp-ui
                                       ;; company-lsp
@@ -170,9 +176,6 @@ It should only modify the values of Spacemacs settings."
    ;; (default 'vim)
    dotspacemacs-editing-style 'vim
 
-   ;; If non-nil output loading progress in `*Messages*' buffer. (default nil)
-   dotspacemacs-verbose-loading nil
-
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
    ;; banner, `random' chooses a random text banner in `core/banners'
@@ -192,6 +195,11 @@ It should only modify the values of Spacemacs settings."
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
+
+   ;; Default major mode for a new empty buffer. Possible values are mode
+   ;; names such as `text-mode'; and `nil' to use Fundamental mode.
+   ;; (default `text-mode')
+   dotspacemacs-new-empty-buffer-major-mode 'text-mode
 
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
@@ -327,6 +335,11 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil) (Emacs 24.4+ only)
    dotspacemacs-maximized-at-startup nil
 
+   ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
+   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
+   ;; borderless fullscreen. (default nil)
+   dotspacemacs-undecorated-at-startup nil
+
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -354,10 +367,14 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smooth-scrolling t
 
    ;; Control line numbers activation.
-   ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
-   ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
+   ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
+   ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
+   ;; numbers are relative. If set to `visual', line numbers are also relative,
+   ;; but lines are only visual lines are counted. For example, folded lines
+   ;; will not be counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
+   ;;   :visual nil
    ;;   :disabled-for-modes dired-mode
    ;;                       doc-view-mode
    ;;                       markdown-mode
@@ -366,7 +383,7 @@ It should only modify the values of Spacemacs settings."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers 'relative
+   dotspacemacs-line-numbers 'visual
 
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
@@ -377,7 +394,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-smartparens-strict-mode nil
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
-   ;; over any automatically added closing parenthesis, bracket, quote, etc…
+   ;; over any automatically added closing parenthesis, bracket, quote, etc...
    ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
    dotspacemacs-smart-closing-parenthesis nil
 
@@ -474,44 +491,69 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ;; (spacemacs/toggle-which-key-off)
+  (setq-default which-key-dont-use-unicode t)
 
   ;; LSP mode definition for Elixir
   (require 'lsp)
-  (require 'company-lsp)
   (require 'flycheck)
-
-  (defcustom elixir-ls-executable "/home/jtrantin/Apps/elixir-ls/bin/language_server.sh"
-    "The elixir-language-server executable to use.
-Leave as just the executable name to use the default behavior of
-finding the executable with `exec-path'."
-    :group 'lsp-elixir
-    :type 'file)
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection
-                                     (-const elixir-ls-executable))
-                    :major-modes '(elixir-mode)
-                    :priority -1
-                    :server-id 'elixir-ls
-                    :initialized-fn (lambda (workspace)
-                                      ;; override save => true if server doesn't advertise it
-                                      ;; (puthash
-                                      ;;  "textDocumentSync"
-                                      ;;  (ht ("save" t)
-                                      ;;      ("change" 2))
-                                      ;;  (lsp--workspace-server-capabilities workspace))
-                                      (with-lsp-workspace workspace
-                                        (let ((config `(:elixirLS (:mixEnv "dev" :dialyzerEnabled :json-false))))
-                                          (lsp--set-configuration config))
-                                        )
-                                      )
-                    ))
+  (require 'lsp-elixir)
+  (setq lsp-elixir-dialyzer-enabled f)
+  (setq lsp-elixir-mix-env "dev")
+  (setq lsp-clients-elixir-server-executable "/home/jtrantin/Apps/elixir-ls/bin/language_server.sh")
   (add-hook 'elixir-mode-hook 'lsp)
-  (add-hook 'lsp-ui-mode-hook (lambda ()
-                                (if
-                                    (not (member 'elixir-credo (flycheck-all-next-checkers 'lsp-ui)))
-                                    (flycheck-add-next-checker 'lsp-ui 'elixir-credo))
-                                ))
-  (push 'company-lsp company-backends)
+
+;;   (defcustom elixir-ls-executable "/home/jtrantin/Apps/elixir-ls/bin/language_server.sh"
+;;     "The elixir-language-server executable to use.
+;; Leave as just the executable name to use the default behavior of
+;; finding the executable with `exec-path'."
+;;     :group 'lsp-elixir
+;;     :type 'file)
+;;   (lsp-register-client
+;;    (make-lsp-client :new-connection (lsp-stdio-connection (lambda () elixir-ls-executable))
+;;                     :major-modes '(elixir-mode)
+;;                     :priority -1
+;;                     :server-id 'elixir-ls
+;;                     :initialized-fn (lambda (workspace)
+;;                                       ;; override save => true if server doesn't advertise it
+;;                                       ;; (puthash
+;;                                       ;;  "textDocumentSync"
+;;                                       ;;  (ht ("save" t)
+;;                                       ;;      ("change" 2))
+;;                                       ;;  (lsp--workspace-server-capabilities workspace))
+;;                                       (with-lsp-workspace workspace
+;;                                         (let ((config `(:elixirLS (:mixEnv "dev" :dialyzerEnabled :json-false))))
+;;                                           (lsp--set-configuration config))
+;;                                         )
+;;                                       )
+;;                     ))
+;;   (add-hook 'lsp-ui-mode-hook (lambda ()
+;;                                 (if
+;;                                     (not (member 'elixir-credo (flycheck-all-next-checkers 'lsp)))
+;;                                     (flycheck-add-next-checker 'lsp 'elixir-credo))
+;;                                 ))
+;;   (setq lsp-enable-file-watchers nil)
+  ;; (push 'company-lsp company-backends)
+
+  ;; EGLOT LSP configuration
+  ;; (require 'eglot)
+  ;; (add-to-list 'eglot-server-programs `(elixir-mode "/home/jtrantin/Apps/elixir-ls/bin/language_server.sh"))
+  ;; (add-hook 'elixir-mode-hook 'eglot-ensure)
+  ;; (evil-define-key 'normal elixir-mode-map (kbd "K") 'eglot-help-at-point)
+  ;; (evil-define-key 'normal elixir-mode-map (kbd "gd") 'evil-jump-to-tag)
+  ;; (evil-define-key 'normal elixir-mode-map (kbd "gD") 'xref-find-definitions-other-window)
+  ;; (evil-define-key 'normal elixir-mode-map (kbd "gs") 'xref-find-references)
+  ;; (with-eval-after-load 'elixir-mode
+  ;;   (spacemacs/declare-prefix-for-mode 'elixir-mode
+  ;;     "me" "errors" "navigating between errors in buffer")
+  ;;   (spacemacs/set-leader-keys-for-major-mode 'elixir-mode
+  ;;     "en" 'flymake-goto-next-error
+  ;;     "ep" 'flymake-goto-prev-error
+  ;;     "eN" 'flycheck-next-error
+  ;;     "eP" 'flycheck-previous-error)
+  ;;   )
+  ;;   (setq-default eglot-workspace-configuration
+  ;;                 '((:elixirLS :mixEnv "dev" :dialyzerEnabled :json-false)))
 
   ;; Using correct formatter.exs for Elixir Formatter
   (add-hook 'elixir-format-hook (lambda ()
@@ -523,6 +565,11 @@ finding the executable with `exec-path'."
                                           (setq elixir-format-arguments nil)
                                           ))
                                     (setq elixir-format-arguments nil))))
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'elixir-format nil t)
+              ))
+
   ;; ExUnit tester config
   (with-eval-after-load 'elixir-mode
     (spacemacs/declare-prefix-for-mode 'elixir-mode
@@ -546,9 +593,40 @@ finding the executable with `exec-path'."
    '(org-agenda-files (quote ("~/Documents/notes/todo.org")))
    '(org-default-notes-file "~/Documents/notes/todo.org")
    '(org-agenda-done))
+  ;; Clock settings
+  (setq org-clock-persist 'history)
+  (org-clock-persistence-insinuate)
+  (setq spaceline-org-clock-p t)
+  (setq org-clock-mode-line-total 'current)
+  ;; Custom keybindings
+  (spacemacs/declare-prefix-for-mode 'org-mode "mk" "org-kanban")
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode
+    "ks" 'org-kanban/shift
+    "kn" 'org-kanban/next
+    "kp" 'org-kanban/prev
+    "U" 'org-update-all-dblocks)
+  ;; Window-open config for following links
+  (setq org-link-frame-setup '((vm . vm-visit-folder-other-frame)
+   (vm-imap . vm-visit-imap-folder-other-frame)
+   (gnus . org-gnus-no-new-news)
+   (file . find-file)
+   (wl . wl-other-frame)))
+
 
   ;; JS settings
   (setq js2-strict-missing-semi-warning nil)
+
+  ;; col width incidator at 100
+  (add-hook 'prog-mode-hook 'turn-on-fci-mode)
+  (add-hook 'text-mode-hook 'turn-on-fci-mode)
+  (setq fci-rule-color "#484848")
+  (setq-default fill-column 100)
+  (add-hook 'git-commit-mode-hook '(lambda ()
+                                     (setq fill-column 72)))
+
+
+  ;; dired sorting
+  (setq dired-listing-switches "-lXGh --group-directories-first")
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -563,9 +641,24 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "1436d643b98844555d56c59c74004eb158dc85fc55d2e7205f8d9b8c860e177f" default)))
+ '(evil-want-Y-yank-to-eol nil)
+ '(org-agenda-done nil)
+ '(org-agenda-files (quote ("~/Documents/notes/todo.org")))
+ '(org-clock-mode-line-total (quote current))
+ '(org-default-notes-file "~/Documents/notes/todo.org")
  '(package-selected-packages
    (quote
-    (yasnippet-snippets writeroom-mode visual-fill-column treemacs-projectile treemacs-evil treemacs racer pipenv org-brain meghanada magit-svn lsp-ui lsp-java json-navigator helm-xref groovy-mode exunit doom-modeline counsel-projectile counsel swiper ivy company-lsp centered-cursor-mode ccls browse-at-remote rust-mode lsp-mode window-purpose rtags transient all-the-icons dash org-plus-contrib zeal-at-point yapfify yaml-mode ws-butler winum which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sql-indent spaceline powerline smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pcre2el paradox spinner orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-bullets open-junk-file ob-elixir neotree mwim move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode linum-relative link-hint json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc indent-guide hydra hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flycheck-pos-tip pos-tip flycheck-mix flycheck-credo flycheck flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu erlang emmet-mode elisp-slime-nav dumb-jump diminish diff-hl define-word dactyl-mode cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-anaconda column-enforce-mode coffee-mode clean-aindent-mode bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed anaconda-mode pythonic f alchemist s company elixir-mode pkg-info epl aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup gruvbox-theme))))
+    (lsp-ui lsp-python-ms helm-lsp dap-mode lsp-treemacs bui treemacs pfuture company-lsp lsp-mode zeal-at-point yapfify yaml-mode ws-butler winum which-key web-mode web-beautify volatile-highlights vimrc-mode vi-tilde-fringe uuidgen use-package unfill toc-org tagedit sql-indent spaceline powerline smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters pyvenv pytest pyenv-mode py-isort pug-mode popwin pip-requirements persp-mode pcre2el paradox spinner orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download org-bullets open-junk-file ob-elixir neotree mwim move-text mmm-mode markdown-toc markdown-mode magit-gitflow macrostep lorem-ipsum livid-mode skewer-mode simple-httpd live-py-mode linum-relative link-hint json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc indent-guide hydra hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-make projectile helm-gitignore request helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md fuzzy flycheck-pos-tip pos-tip flycheck-mix flycheck-credo flycheck flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit with-editor evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu erlang emmet-mode elisp-slime-nav dumb-jump diminish diff-hl define-word dactyl-mode cython-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-anaconda column-enforce-mode coffee-mode clean-aindent-mode bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed anaconda-mode pythonic f alchemist s company elixir-mode pkg-info epl aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup gruvbox-theme)))
+ '(safe-local-variable-values
+   (quote
+    ((lsp-enable-file-watchers nil)
+     (javascript-backend . tern)
+     (javascript-backend . lsp)
+     (elixir-enable-compilation-checking . t)
+     (elixir-enable-compilation-checking)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
