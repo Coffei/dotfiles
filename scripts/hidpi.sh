@@ -22,5 +22,5 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 # For miscellaneous applications.
 echo Xft.dpi: $dpi | xrdb -merge
 
-sed -i '/dpi = /c\dpi = 192' $HOME/.config/polybar/config
-sed -i '/height = /c\height = 54' $HOME/.config/polybar/config
+sed -i '/dpi = /c\dpi = 192' $HOME/.config/polybar/config.ini
+sed -i '/height = /c\height = 54' $HOME/.config/polybar/config.ini

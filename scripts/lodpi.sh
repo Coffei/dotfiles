@@ -22,5 +22,6 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 # For miscellaneous applications.
 echo Xft.dpi: $dpi | xrdb -merge
 
-sed -i '/dpi = /c\dpi = 96' $HOME/.config/polybar/config
-sed -i '/height = /c\height = 27' $HOME/.config/polybar/config
+# These are still valid even if gnome handles the scaling
+sed -i '/dpi = /c\dpi = 96' $HOME/.config/polybar/config.ini
+sed -i '/height = /c\height = 27' $HOME/.config/polybar/config.ini
