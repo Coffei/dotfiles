@@ -1,2 +1,2 @@
 #!/bin/bash
-ddcutil setvcp 10 $1 --sleep-multiplier .1 --nousb
+ddcutil setvcp 10 $1 -b 6
