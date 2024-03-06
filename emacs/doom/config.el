@@ -56,7 +56,7 @@
 (setq evil-escape-key-sequence "fd")
 ;; using mm height seems backwards but it works for my current setups, it should
 ;; use resolution or DPI but I couldn't make that work
-(setq doom-font (font-spec :family "Source Code Pro" :size 15))
+(setq doom-font (font-spec :family "FiraCode Nerd Font Ret" :size 15))
 
 (setq evil-snipe-scope 'buffer)
 
@@ -94,46 +94,59 @@
 (map! :after elixir-mode :map elixir-mode-map :desc "credo" :localleader "C" #'run-credo-checker)
 (map! :map flycheck :desc "Show all flychecks" :leader "cX" #'flycheck-list-errors)
 
+;; Add missing helm mapping to open stuff in other window
+(map! :map helm-map :desc "Open thing in other window" "C-c o" #'helm-ff-run-switch-other-window)
+(map! :map helm-map :desc "Open thing in other window" "C-c C-o" #'helm-ff-run-switch-other-window)
+;; And open in split to the right
+(setq helm-split-window-default-side 'right)
+(setq helm-split-window-other-side-when-one-window 'right)
+(setq helm-window-prefer-horizontal-split t)
+
 ;; LSP and elixir stuff
 (setq lsp-elixir-mix-env "dev")
 (setq lsp-elixir-dialyzer-enabled nil)
-(setq lsp-enable-file-watchers nil)
-(add-hook 'lsp-after-initialize-hook
-          (lambda ()
-            (flycheck-add-next-checker 'lsp 'elixir-credo)))
-(add-hook 'elixir-mode-hook
-          (lambda ()
-            (setq-local flycheck-check-syntax-automatically '(mode-enabled save))
-            (setq lsp-flycheck-live-reporting nil)))
+;; (setq lsp-enable-file-watchers nil)
+;; (add-hook 'lsp-after-initialize-hook
+;;           (lambda ()
+;;             (flycheck-add-next-checker 'lsp 'elixir-credo)))
+;; (add-hook 'elixir-mode-hook
+;;           (lambda ()
+;;             (setq-local flycheck-check-syntax-automatically '(mode-enabled save))
+;;             (setq lsp-flycheck-live-reporting nil)))
 
 
 ;; Set custom JS formatting rules
 (setq lsp-javascript-format-insert-space-before-function-parenthesis t)
 (setq lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-braces t)
-(setq lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-parenthesis t)
+(setq lsp-javascript-format-insert-space-after-opening-and-before-closing-nonempty-parenthesis nil)
 (setq lsp-javascript-format-insert-space-after-opening-and-before-closing-jsx-expression-braces t)
 
 ;; Enable auto-formatting only for the modes where it doesn' cause any issues, e.g.:
-;; - HTML mode - the formatting is too different and not happy with PHX stuff
-;; - JS - UI is formatted too differently and uses much more complex custom rules for now
-(setq +format-on-save-enabled-modes '(elixir-mode))
+;; - Elixir
+;; - JS - we now use ts-ls formatter
+;; Since (format +onsave) doesn't work well now (it uses non-lsp formatter) this should od the same
+;; (setq +format-on-save-enabled-modes '(elixir-mode rjsx-mode))
+(add-hook! elixir-mode (add-hook 'before-save-hook 'lsp-format-buffer nil t))
+(add-hook! rjsx-mode (add-hook 'before-save-hook 'lsp-format-buffer nil t))
 
 ;; Magit sort branches by last commit date
 (setq magit-list-refs-sortby "-committerdate")
 
 ;; Add our Gitlab server
 (with-eval-after-load 'forge
-        (add-to-list 'forge-alist '("gitlab.dev.altworx.com" "gitlab.dev.altworx.com/api/v4" "gitlab.dev.altworx.com" forge-gitlab-repository))
-        (add-to-list 'forge-alist '("gitlab.altworx" "gitlab.dev.altworx.com/api/v4" "gitlab.altworx" forge-gitlab-repository)))
+  (add-to-list 'forge-alist '("gitlab.dev.altworx.com" "gitlab.dev.altworx.com/api/v4" "gitlab.dev.altworx.com" forge-gitlab-repository))
+  (add-to-list 'forge-alist '("gitlab.altworx" "gitlab.dev.altworx.com/api/v4" "gitlab.altworx" forge-gitlab-repository)))
 (with-eval-after-load 'browse-at-remote
-        (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^gitlab\\.dev\\.altworx\\.com$" :type "gitlab"))
-        (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^gitlab\\.altworx$" :type "gitlab" :actual-host "gitlab.dev.altworx.com")))
+  (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^gitlab\\.dev\\.altworx\\.com$" :type "gitlab"))
+  (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^gitlab\\.altworx$" :type "gitlab" :actual-host "gitlab.dev.altworx.com")))
 (setq-default eglot-workspace-configuration
-        '((:elixirLS :mixEnv "dev" :dialyzerEnabled :json-false)))
+              '((:elixirLS :mixEnv "dev" :dialyzerEnabled :json-false)))
 
 ;; Enable flyspell everywhere!
 (add-hook 'text-mode-hook
           (lambda () (flyspell-mode 1)))
+
+(add-to-list 'doom-detect-indentation-excluded-modes 'elixir-mode)
 
 ;; Enable company numbers
 (setq company-show-numbers 'left)
@@ -141,10 +154,15 @@
 ;; Exclude _ from word separators in Elixir
 ;; change to 'after-change-major-mode ti set it everywhere
 (add-hook 'elixir-mode-hook (lambda ()
-        (modify-syntax-entry ?_ "w")))
-;; And add dabbrev company
-;; (defun set-dabbrev () (add-to-list (make-local-variable 'company-backends) 'company-dabbrev))
-(add-hook 'elixir-mode-hook
-          (lambda () (add-hook 'company-mode-hook
-                               (lambda ()
-                                 (setq-local company-backends '((:separate company-capf company-yasnippet company-dabbrev)))))))
+                              (modify-syntax-entry ?_ "w")))
+;; And add dabbrev company - doesn't work, the variable keeps getting edited by someone else
+;; (add-hook 'elixir-mode-hook
+;;           (lambda () (add-hook 'company-mode-hook
+;;                                (lambda ()
+;;                                  (setq-local company-backends '((:separate company-capf company-yasnippet company-dabbrev)))))))
+(use-package! xclip
+  :config
+  (setq xclip-program "wl-copy")
+  (setq xclip-select-enable-clipboard t)
+  (setq xclip-mode t)
+  (setq xclip-method (quote wl-copy)))
