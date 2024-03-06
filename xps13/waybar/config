@@ -1,24 +1,9 @@
 {
     "spacing": 4, // Gaps between modules (4px)
+    "layer": "top",
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode", "sway/scratchpad"],
-    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "backlight", "sway/language", "battery", "battery#bat2", "clock", "tray"],
-    // Modules configuration
-    // "sway/workspaces": {
-    //     "disable-scroll": true,
-    //     "all-outputs": true,
-    //     "format": "{name}: {icon}",
-    //     "format-icons": {
-    //         "1": "",
-    //         "2": "",
-    //         "3": "",
-    //         "4": "",
-    //         "5": "",
-    //         "urgent": "",
-    //         "focused": "",
-    //         "default": ""
-    //     }
-    // },
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-right": ["idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "backlight", "hyprland/language", "battery", "battery#bat2", "clock", "tray"],
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
@@ -37,6 +22,9 @@
         "format-icons": ["", ""],
         "tooltip": true,
         "tooltip-format": "{app}: {title}"
+    },
+    "hyprland/window":{
+      "separate-outputs": true
     },
     "mpd": {
         "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
@@ -165,5 +153,13 @@
         "exec": "sensors | awk '/fan1:/ {print $2,$3}'",
         "format": "{} ",
         "interval": 5,
+    },
+    "custom/ddc_brightness": {
+        "format": "{}% 🟒",
+        "exec": "get-brightness",
+        "on-scroll-up": "set-brightness '+ 10'; pkill -SIGRTMIN+8 waybar",
+        "on-scroll-down": "set-brightness '- 10'; pkill -SIGRTMIN+8 waybar",
+        "tooltip": false,
+        "signal": 8
     }
 }
