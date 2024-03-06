@@ -1,0 +1,16 @@
+{
+    "languageserver": {
+        "elixir": {
+            "command": "/home/jtrantin/Apps/elixir-ls/bin/language_server.sh",
+            "filetypes": ["elixir", "eelixir"],
+            "settings": {
+                "elixirLS": {
+                    "mixEnv": "dev",
+                    "dialyzerEnabled": false
+                }
+            }
+        }
+    },
+    "coc.preferences.formatOnSaveFiletypes": ["elixir"],
+    "java.format.settings.url": "/home/jtrantin/.config/coc/extensions/node_modules/redhat.java/eclipse-formatter.xml"
+}
