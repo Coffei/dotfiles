@@ -9,12 +9,19 @@ fi
 # export SYSTEMD_PAGER=
 alias tv='LC_TIME=en_US.UTF-8 vimx ~/Documents/notes/todo.org'
 
+# alias vim to edit terminal title
+alias vimx='echo -ne "\033]0;vimx: ${PWD##*/}\007" && vimx'
+
 # Increase history file size
 HISTSIZE=5000
 HISTFILESIZE=10000
 
-# Auto unlock ssh key
-cat ~/.ssh/id_rsa | SSH_ASKPASS="$HOME/.sshpass" ssh-add - &>/dev/null
+# set editor to vim
+export EDITOR=vimx
+
+# Auto unlock ssh key - useful for i3 not for Gnome
+# eval "$(ssh-agent)"
+# cat ~/.ssh/id_rsa | SSH_ASKPASS="$HOME/.sshpass" ssh-add - &> /dev/null
 
 #Java 11 default
 export JAVA_HOME=/usr/lib/jvm/java-11
@@ -78,3 +85,20 @@ export PROMPT_COMMAND=prompt_command
 
 stty -ixon
 unset command_not_found_handle
+
+# Load ASDF
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
+PATH="/home/jtrantin/bin:/home/jtrantin/Apps/elixir-ls/bin:/home/jtrantin/.mix/escripts:/home/jtrantin/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/jtrantin/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/jtrantin/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/jtrantin/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/jtrantin/perl5"; export PERL_MM_OPT;
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/jtrantin/Apps/google-cloud-sdk/path.bash.inc' ]; then . '/home/jtrantin/Apps/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/jtrantin/Apps/google-cloud-sdk/completion.bash.inc' ]; then . '/home/jtrantin/Apps/google-cloud-sdk/completion.bash.inc'; fi
+. "$HOME/.cargo/env"
