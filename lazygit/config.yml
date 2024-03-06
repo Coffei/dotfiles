@@ -1,0 +1,48 @@
+gui:
+  nerdFontsVersion: "3"
+keybinding:
+  universal:
+    pushFiles: 'p'
+    executeCustomCommand: '!'
+os:
+  edit: 'nvr -cc split --remote-wait +"edit $(pwd)/{{filename}}"'
+customCommands:
+  - key: 'P'
+    description: "Push current branch to upstream"
+    context: 'global'
+    loadingText: 'Pushing ...'
+    stream: true
+    prompts:
+      - type: 'menu'
+        title: 'How to push?'
+        options:
+          - value: 'push'
+          - value: 'push origin HEAD --set-upstream'
+          - value: 'push mine HEAD --set-upstream'
+          - value: 'push --force-with-lease'
+    command: "git {{index .PromptResponses 0}}"
+  - key: '<c-e>'
+    command: 'nvr -cc split --remote-wait +"Git show {{.SelectedLocalCommit.Sha}}"'
+    context: 'commits'
+  - key: '<c-e>'
+    command: 'nvr -cc split --remote-wait +"Git show {{.SelectedSubCommit.Sha}}"'
+    context: 'subCommits'
+  - key: 'm'
+    description: "Fetch merge request ref"
+    context: 'remotes'
+    loadingText: 'Fetching'
+    stream: true
+    prompts:
+      - type: 'input'
+        title: 'Enter the number of MR'
+    command: "git fetch {{.SelectedRemote.Name}} '+refs/merge-requests/{{index .PromptResponses 0}}/*:refs/remotes/{{.SelectedRemote.Name}}/merge-requests/{{index .PromptResponses 0}}/*'"
+  - key: 'M'
+    description: "Fetch merge request ref and checkout to it"
+    context: 'remotes'
+    loadingText: 'Fetching'
+    stream: true
+    prompts:
+      - type: 'input'
+        title: 'Enter the number of MR'
+    command: "git fetch {{.SelectedRemote.Name}} '+refs/merge-requests/{{index .PromptResponses 0}}/*:refs/remotes/{{.SelectedRemote.Name}}/merge-requests/{{index .PromptResponses 0}}/*' && git checkout FETCH_HEAD"
+
